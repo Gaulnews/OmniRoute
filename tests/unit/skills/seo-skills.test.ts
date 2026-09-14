@@ -115,13 +115,125 @@ describe("SEO Skills — registration", () => {
   });
 });
 
+describe("SEO Skills Batch 2 — input validation", () => {
+  it("seoSitemapSkill rejects missing url", async () => {
+    const mod = await import("../../../src/lib/skills/builtin/seoSitemap.js");
+    await assert.rejects(() => mod.seoSitemapSkill({}, { apiKeyId: "test" }), {
+      message: "Missing required field: url",
+    });
+  });
+
+  it("seoSitemapSkill rejects invalid url type", async () => {
+    const mod = await import("../../../src/lib/skills/builtin/seoSitemap.js");
+    await assert.rejects(() => mod.seoSitemapSkill({ url: 42 }, { apiKeyId: "test" }), {
+      message: "Missing required field: url",
+    });
+  });
+
+  it("seoRobotsSkill rejects missing url", async () => {
+    const mod = await import("../../../src/lib/skills/builtin/seoRobots.js");
+    await assert.rejects(() => mod.seoRobotsSkill({}, { apiKeyId: "test" }), {
+      message: "Missing required field: url",
+    });
+  });
+
+  it("seoRobotsSkill rejects invalid url type", async () => {
+    const mod = await import("../../../src/lib/skills/builtin/seoRobots.js");
+    await assert.rejects(() => mod.seoRobotsSkill({ url: false }, { apiKeyId: "test" }), {
+      message: "Missing required field: url",
+    });
+  });
+
+  it("seoPerformanceSkill rejects missing url", async () => {
+    const mod = await import("../../../src/lib/skills/builtin/seoPerformance.js");
+    await assert.rejects(() => mod.seoPerformanceSkill({}, { apiKeyId: "test" }), {
+      message: "Missing required field: url",
+    });
+  });
+
+  it("seoPerformanceSkill rejects invalid url type", async () => {
+    const mod = await import("../../../src/lib/skills/builtin/seoPerformance.js");
+    await assert.rejects(() => mod.seoPerformanceSkill({ url: [] }, { apiKeyId: "test" }), {
+      message: "Missing required field: url",
+    });
+  });
+
+  it("seoBacklinksSkill rejects missing url", async () => {
+    const mod = await import("../../../src/lib/skills/builtin/seoBacklinks.js");
+    await assert.rejects(() => mod.seoBacklinksSkill({}, { apiKeyId: "test" }), {
+      message: "Missing required field: url",
+    });
+  });
+
+  it("seoBacklinksSkill rejects invalid url type", async () => {
+    const mod = await import("../../../src/lib/skills/builtin/seoBacklinks.js");
+    await assert.rejects(() => mod.seoBacklinksSkill({ url: null }, { apiKeyId: "test" }), {
+      message: "Missing required field: url",
+    });
+  });
+});
+
+describe("SEO Skills Batch 2 — registration", () => {
+  it("registerSeoSitemapSkill registers handler", async () => {
+    const mod = await import("../../../src/lib/skills/builtin/seoSitemap.js");
+    const registered: Record<string, unknown> = {};
+    const executor = {
+      registerHandler: (name: string, handler: unknown) => {
+        registered[name] = handler;
+      },
+    };
+    mod.registerSeoSitemapSkill(executor);
+    assert.ok(registered["seo_sitemap"]);
+  });
+
+  it("registerSeoRobotsSkill registers handler", async () => {
+    const mod = await import("../../../src/lib/skills/builtin/seoRobots.js");
+    const registered: Record<string, unknown> = {};
+    const executor = {
+      registerHandler: (name: string, handler: unknown) => {
+        registered[name] = handler;
+      },
+    };
+    mod.registerSeoRobotsSkill(executor);
+    assert.ok(registered["seo_robots"]);
+  });
+
+  it("registerSeoPerformanceSkill registers handler", async () => {
+    const mod = await import("../../../src/lib/skills/builtin/seoPerformance.js");
+    const registered: Record<string, unknown> = {};
+    const executor = {
+      registerHandler: (name: string, handler: unknown) => {
+        registered[name] = handler;
+      },
+    };
+    mod.registerSeoPerformanceSkill(executor);
+    assert.ok(registered["seo_performance"]);
+  });
+
+  it("registerSeoBacklinksSkill registers handler", async () => {
+    const mod = await import("../../../src/lib/skills/builtin/seoBacklinks.js");
+    const registered: Record<string, unknown> = {};
+    const executor = {
+      registerHandler: (name: string, handler: unknown) => {
+        registered[name] = handler;
+      },
+    };
+    mod.registerSeoBacklinksSkill(executor);
+    assert.ok(registered["seo_backlinks"]);
+  });
+});
+
 describe("SEO Tools — MCP tool definitions", () => {
-  it("exports three tools with correct scopes", async () => {
+  it("exports seven tools with correct scopes", async () => {
     const mod = await import("../../../open-sse/mcp-server/tools/seoTools.js");
     const tools = mod.seoTools;
     assert.ok(tools.omniroute_seo_audit);
     assert.ok(tools.omniroute_seo_content_analyze);
     assert.ok(tools.omniroute_seo_schema_validate);
+    assert.ok(tools.omniroute_seo_sitemap);
+    assert.ok(tools.omniroute_seo_robots);
+    assert.ok(tools.omniroute_seo_performance);
+    assert.ok(tools.omniroute_seo_backlinks);
 
     for (const tool of Object.values(tools) as { scopes: string[] }[]) {
       assert.ok(tool.scopes.includes("read:seo"));
