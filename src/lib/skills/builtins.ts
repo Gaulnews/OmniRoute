@@ -1,4 +1,15 @@
 import { SkillHandler } from "./types";
+import { registerSeoTechnicalSkill } from "./builtin/seoTechnical";
+import { registerSeoContentSkill } from "./builtin/seoContent";
+import { registerSeoSchemaSkill } from "./builtin/seoSchema";
+import { registerSeoSitemapSkill } from "./builtin/seoSitemap";
+import { registerSeoRobotsSkill } from "./builtin/seoRobots";
+import { registerSeoPerformanceSkill } from "./builtin/seoPerformance";
+import { registerSeoBacklinksSkill } from "./builtin/seoBacklinks";
+import { registerSeoKeywordsSkill } from "./builtin/seoKeywords";
+import { registerSeoCompetitorSkill } from "./builtin/seoCompetitor";
+import { registerSeoLocalSkill } from "./builtin/seoLocal";
+import { registerSeoAccessibilitySkill } from "./builtin/seoAccessibility";
 import { executeWebSearch } from "@/lib/search/executeWebSearch";
 import { executeWebFetch } from "./webFetchExecution";
 import { resolveDataDir } from "@/lib/dataPaths";
@@ -525,4 +536,15 @@ export function registerBuiltinSkills(executor: any): void {
   for (const [name, handler] of Object.entries(builtinSkills)) {
     executor.registerHandler(name, handler);
   }
+  registerSeoTechnicalSkill(executor);
+  registerSeoContentSkill(executor);
+  registerSeoSchemaSkill(executor);
+  registerSeoSitemapSkill(executor);
+  registerSeoRobotsSkill(executor);
+  registerSeoPerformanceSkill(executor);
+  registerSeoBacklinksSkill(executor);
+  registerSeoKeywordsSkill(executor);
+  registerSeoCompetitorSkill(executor);
+  registerSeoLocalSkill(executor);
+  registerSeoAccessibilitySkill(executor);
 }
