@@ -1,4 +1,7 @@
 import { SkillHandler } from "./types";
+import { registerSeoTechnicalSkill } from "./builtin/seoTechnical";
+import { registerSeoContentSkill } from "./builtin/seoContent";
+import { registerSeoSchemaSkill } from "./builtin/seoSchema";
 import { executeWebSearch } from "@/lib/search/executeWebSearch";
 import { executeWebFetch } from "./webFetchExecution";
 import { resolveDataDir } from "@/lib/dataPaths";
@@ -525,4 +528,7 @@ export function registerBuiltinSkills(executor: any): void {
   for (const [name, handler] of Object.entries(builtinSkills)) {
     executor.registerHandler(name, handler);
   }
+  registerSeoTechnicalSkill(executor);
+  registerSeoContentSkill(executor);
+  registerSeoSchemaSkill(executor);
 }
